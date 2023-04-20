@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Conta</title>
+    <style>
+        .produto{
+            margin: 10px;
+            background-color: aqua;
+            border-radius: 15px;
+            padding: 5px;
+            width: 350px;
+        }
+
+        #imprimir {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body align="center">
+    <a href="cadastrarproduto.html">Cadastre mais um produto</a><br>
+    <a href="produtooutros.html">Veja outros produtos aqui!</a><br>
+    <button onclick="removerConta()">Deslogar</button><br>
+    <input readonly id="username">
+    <div id="imprimir">
+        
+    </div>
+</body>
+<script>
+    var nome = localStorage.getItem("nomeUsuario");
+    document.getElementById("username").value = nome;
+    function removerConta() {
+        //apagar o storage local
+        localStorage.removeItem("nomeUsuario");
+        window.location.replace("http://localhost:3000/");
+    }
+
+    console.log(nome)
+
+    fetch(`http://localhost:3000/produtos`, {
+        method: 'GET'
+    }).then(response => response.json())
+        .then(total => {
+            for (let x = 1; x <= total.length; x++) {
+                fetch(`http://localhost:3000/produtos/${x}`, {
+                    method: 'GET'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (nome == data.usuario) {
+                            document.getElementById('imprimir').innerHTML += `<div class="produto" id="produto${x}">
+                                <img id="imag${x}" src="${data.imagem}" width="300px">
+                                <p id="nome${x}">${data.produto}</p>
+                                <p id="desc${x}">${data.descricao}</p>
+                                <p id="preco${x}">${data.preco}</p>
+                                <button onclick="mostrarDetalhes(${x})">Mostrar Detalhes</button>
+                            </div>`
+                        }
+                    })
+            }
+        })
+
+    function mostrarDetalhes(verificar) {
+        window.location.replace(`http://localhost:3000/produtoespecifico.html#${verificar}`);
+    }
+
+    if(nome == null) {
+        document.body.innerHTML = "<h1>FAÇA UM LOGIN</h1>"
+        alert("Você precisa de um login para entrar ver os produtos. redirecionando para a página de login...")
+        window.location.replace(`http://localhost:3000/`);
+    }
+</script>
+
+</html>

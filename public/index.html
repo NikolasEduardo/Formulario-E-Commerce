@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login na Conta</title>
+</head>
+
+<body align="center">
+    <h1>Login</h1>
+    <a href="cadastro.html">Não tem um Login? Cadastre-se aqui!</a><br><br>
+    <form action="">
+        <label>Nome:</label>
+        <br>
+        <input type="text" id="username" maxlength="22">
+        <br>
+        <label>Senha:</label>
+        <br>
+        <input type="password" id="senha">
+        <br>
+
+        <br><br>
+
+        <button id="login">Login</button>
+    </form>
+</body>
+<script>
+    //apagar o storage local
+    localStorage.removeItem("nomeUsuario");
+
+    document.querySelector('form').addEventListener('submit', evento => {
+        evento.preventDefault();
+        fetch(`http://localhost:3000/usuarios?username=${document.getElementById('username').value}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    if (data[0].senha == document.getElementById("senha").value) {
+                        //inserir um dado local
+                        localStorage.setItem("nomeUsuario", data[0].username);
+                        console.log("funcionou");
+                        window.location.replace("http://localhost:3000/produtosexiste.html");
+                    } else {
+                        alert("Senha Incorreta")
+                    }
+                } else {
+                    alert("Username Inexistente")
+                }
+            })
+    })
+
+    var nome = localStorage.getItem("nomeUsuario");
+
+    if (nome != null) {
+        document.getElementById("username").value = nome;
+    }
+</script>
+
+</html>

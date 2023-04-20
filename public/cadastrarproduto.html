@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Produto</title>
+    <style>
+        #caixa {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #imagem {
+            width: 440px;
+            height: 440px;
+            background-color: aqua;
+            background-image: url(https://pm1.narvii.com/7061/94a9e73f84c28d8c8cb26d1aca69edec13075dfer1-500-500v2_00.jpg);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 30px;
+        }
+
+        #forms {
+            width: 350px;
+            background-color: cyan;
+            border-radius: 30px;
+            padding: 15px 0px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        @media(max-width: 825px) {
+            #caixa{
+                flex-direction: column;
+            }
+            #imagem{
+                width: 400px;
+                height: 400px;
+            }
+        }
+        @media(max-width: 500px) {
+            #forms{
+                width: 300px;
+            }
+            #imagem{
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body align="center">
+    <h1>Cadastre um Produto:</h1>
+    <a href="produtooutros.html">veja os produtos de outras pessoas aqui!</a><br>
+    <a href="produtosexiste.html">veja seus produtos já cadastrados aqui!</a><br><br>
+    <div id="caixa">
+        <div id="imagem"><input type="file" id="escolherimg" accept=".png,.jpeg,.jpg,.webm,." size="10000000"></div>
+        <div id="forms">
+            <form>
+                <label>Usuário:</label>
+                <br>
+                <input id="username" type="text" readonly>
+                <br>
+                <label>Nome do Produto:</label>
+                <br>
+                <input maxlength="25" id="nomeProd" type="text" placeholder="Caixa de Fósforos">
+                <br>
+                <label>Descrição:</label>
+                <br>
+                <textarea maxlength="100" name="Descricao" id="descProd" cols="21" rows="4" style="resize: none"
+                    placeholder="Produto Incrivel Charmoso para suas melhores necessidades"></textarea>
+                <br>
+                <label>Preço:</label>
+                <br>
+                <select name="" id="moedaProd">
+                    <option value="R$">R$</option>
+                    <option value="US$">US$</option>
+                </select>
+                <input id="precoProd" maxlength="7" type="text" placeholder="19.20">
+                <br>
+                <label>Quantidade:</label>
+                <br>
+                <input id="quantProd" maxlength="5" type="number" placeholder="10 unidades">
+                <br>
+                <label>Categoria:</label>
+                <br>
+                <select name="categoria" id="categProd">
+                    <option>Selecione uma Categoria</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Vestuário">Vestuário</option>
+                    <option value="Brinquedos">Brinquedos</option>
+                    <option value="Instrumentos musicais">Instrumentos musicais</option>
+                    <option value="Antiguidades">Antiguidades</option>
+                    <option value="Automóveis">Automóveis</option>
+                    <option value="Livros">Livros</option>
+                    <option value="Beleza e saúde">Beleza e saúde</option>
+                    <option value="Esportes e lazer">Esportes e lazer</option>
+                    <option value="Casa e decoração">Casa e decoração</option>
+                    <option value="Cosméticos">Cosméticos</option>
+                    <option value="Pet shop">Pet shop</option>
+                    <option value="Moda íntima">Moda íntima</option>
+                    <option value="Papelaria">Papelaria</option>
+                    <option value="Alimentos e bebidas">Alimentos e bebidas</option>
+                    <option value=“Joias e bijuterias”>Joias e bijuterias</option>
+                    <option value=“Artesanato”>Artesanato</option>
+                    <option value=“Produtos naturais”>Produtos naturais</option>
+                    <option value=“Ferramentas”>Ferramentas</option>
+                    <option value=“Música”>Música</option>
+                </select>
+                <br>
+                <label>Contato do cliente:</label>
+                <br>
+                <input maxlength="30" id="contato" type="mail" placeholder="teste@example.com">
+                <br>
+                <label>Disponibilidade:</label>
+                <br>
+                <select name="" id="disponivel">
+                    <option>Selecione a Disponibilidade</option>
+                    <option value="Disponivel">Disponivel</option>
+                    <option value="Não Disponivel">Não Disponivel</option>
+                </select>
+                <br><br><br>
+                <button>Cadastrar Produto</button>
+            </form>
+        </div>
+    </div>
+    <br><br>
+
+</body>
+<script src="script.js"></script>
+
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto</title>
+    <style>
+        #caixa {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #imagem {
+            width: 440px;
+            height: 440px;
+            background-color: aqua;
+            background-image: url(https://pm1.narvii.com/7061/94a9e73f84c28d8c8cb26d1aca69edec13075dfer1-500-500v2_00.jpg);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 30px;
+        }
+
+        #forms {
+            width: 350px;
+            background-color: cyan;
+            border-radius: 30px;
+            padding: 15px 0px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        #abaixo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #comentarios,
+        #postar {
+            padding: 15px;
+            margin: 10px;
+            border-radius: 15px;
+            width: 800px;
+            background-color: aquamarine;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        #comentarios {
+            flex-direction: column;
+        }
+
+        hr {
+            border: 1px solid rgb(84, 173, 144);
+            width: 100%;
+            margin: 25px 0px;
+        }
+
+        h2,
+        h4 {
+            margin: 1px;
+        }
+
+        @media(max-width: 850px) {
+            #caixa {
+                flex-direction: column;
+            }
+
+            #imagem {
+                width: 400px;
+                height: 400px;
+            }
+
+            #comentarios,
+            #postar {
+                width: 450px;
+            }
+        }
+
+        @media(max-width: 500px) {
+            #forms {
+                width: 300px;
+            }
+
+            #imagem {
+                width: 300px;
+                height: 300px;
+            }
+
+            #comentarios,
+            #postar {
+                width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body align="center">
+    <a href="produtosexiste.html">ver seus produtos</a><br>
+    <a href="produtooutros.html">conferir outros produtos</a><br>
+    <a href="index.html">Deslogar</a><br>
+    <br><br>
+    <div id="caixa">
+        <div id="imagem">
+            <input type="file" id="escolherimg" accept=".png,.jpeg,.jpg,.webm,." size="10000000">
+        </div>
+        <div id="forms">
+            <form>
+                <label>Usuário:</label>
+                <br>
+                <input id="username" type="text" readonly>
+                <br>
+                <label>Nome do Produto:</label>
+                <br>
+                <input readonly id="nomeProd" type="text" placeholder="Caixa de Fósforos">
+                <br>
+                <label>Descrição:</label>
+                <br>
+                <textarea readonly name="Descricao" id="descProd" cols="21" rows="4" style="resize: none"
+                    placeholder="Produto Incrivel Charmoso para suas melhores necessidades"></textarea>
+                <br>
+                <label>Preço:</label>
+                <br>
+                <input readonly id="precoProd" type="text" placeholder="19.20">
+                <br>
+                <label>Quantidade:</label>
+                <br>
+                <input readonly id="quantProd" type="number" placeholder="10 unidades">
+                <br>
+                <label>Categoria:</label>
+                <br>
+                <input readonly type="text" id="categProd">
+                <br>
+                <label>Contato do cliente:</label>
+                <br>
+                <input readonly id="contato" type="mail" placeholder="teste@example.com">
+                <br>
+                <label>Disponibilidade:</label>
+                <br>
+                <input readonly type="text" id="disponivel">
+                <br><br><br>
+                <button onclick="abrirPagina()" id="comprar">Comprar</button>
+            </form>
+        </div>
+    </div>
+    <div id="abaixo">
+        <div id="postar">
+            <textarea name="comentario" id="comentario" maxlength="500" cols="70" rows="3"
+                style="resize: none; font-size: large;"></textarea>
+            <button onclick="enviarComentario()">Comentar</button>
+        </div>
+        <div id="comentarios"></div>
+    </div>
+</body>
+<script>
+    var nome = localStorage.getItem("nomeUsuario");
+
+    const idproduto = window.location.hash.substring(1);
+
+    var imagemProd
+
+    fetch(`http://localhost:3000/comentarios?post=${idproduto}`)
+        .then(response => response.json())
+        .then(data => {
+            for (let index = 0; index < data.length; index++) {
+                document.getElementById('comentarios').innerHTML += `<h2>Usuário: ${data[index].username}</h2>
+            <h4>${data[index].comentario}</h4>
+            <hr>`
+            }
+        })
+
+
+    fetch(`http://localhost:3000/produtos/${idproduto}`, {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').value = data.usuario;
+            document.getElementById('nomeProd').value = data.produto;
+            document.getElementById('descProd').value = data.descricao;
+            document.getElementById('precoProd').value = data.preco;
+            document.getElementById('quantProd').value = data.quantidade;
+            document.getElementById('categProd').value = data.categoria;
+            document.getElementById('contato').value = data.contato;
+            document.getElementById('disponivel').value = data.disponibilidade;
+            document.getElementById("imagem").style.backgroundImage = `url(${data.imagem})`;
+            lerImagem(data.imagem)
+            if (document.getElementById('disponivel').value == "Não Disponivel") {
+                document.getElementById('comprar').disabled = true;
+            }
+            if (nome == data.usuario) {
+                document.getElementById('forms').innerHTML = `<form>
+                <label>Usuário:</label>
+                <br>
+                <input value="${data.usuario}" id="username" type="text" readonly>
+                <br>
+                <label>Nome do Produto:</label>
+                <br>
+                <input value="${data.produto}" id="nomeProd" type="text" placeholder="Caixa de Fósforos">
+                <br>
+                <label>Descrição:</label>
+                <br>
+                <textarea name="Descricao" id="descProd" cols="21" rows="4" style="resize: none"
+                    placeholder="Produto Incrivel Charmoso para suas melhores necessidades">${data.descricao}</textarea>
+                <br>
+                <label>Preço:</label>
+                <br>
+                <select name="" id="moedaProd">
+                    <option value="R$">R$</option>
+                    <option value="US$">US$</option>
+                </select>
+                <input value="${data.preco.replace("R$", "").replace("US$", "")}" id="precoProd" type="text" placeholder="19.20">
+                <br>
+                <label>Quantidade:</label>
+                <br>
+                <input value="${data.quantidade}" id="quantProd" type="number" placeholder="10 unidades">
+                <br>
+                <label>Categoria:</label>
+                <br>
+                <select value="${data.categoria}" name="categoria" id="categProd">
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Vestuário">Vestuário</option>
+                    <option value="Brinquedos">Brinquedos</option>
+                    <option value="Instrumentos musicais">Instrumentos musicais</option>
+                    <option value="Antiguidades">Antiguidades</option>
+                    <option value="Automóveis">Automóveis</option>
+                    <option value="Livros">Livros</option>
+                    <option value="Beleza e saúde">Beleza e saúde</option>
+                    <option value="Esportes e lazer">Esportes e lazer</option>
+                    <option value="Casa e decoração">Casa e decoração</option>
+                    <option value="Cosméticos">Cosméticos</option>
+                    <option value="Pet shop">Pet shop</option>
+                    <option value="Moda íntima">Moda íntima</option>
+                    <option value="Papelaria">Papelaria</option>
+                    <option value="Alimentos e bebidas">Alimentos e bebidas</option>
+                    <option value=“Joias e bijuterias”>Joias e bijuterias</option>
+                    <option value=“Artesanato”>Artesanato</option>
+                    <option value=“Produtos naturais”>Produtos naturais</option>
+                    <option value=“Ferramentas”>Ferramentas</option>
+                    <option value=“Música”>Música</option>
+                </select>
+                <br>
+                <label>Contato do cliente:</label>
+                <br>
+                <input value="${data.contato}" id="contato" type="mail" placeholder="teste@example.com">
+                <br>
+                <label>Disponibilidade:</label>
+                <br>
+                <select name="" id="disponivel">
+                    <option value="Disponivel">Disponivel</option>
+                    <option value="Não Disponivel">Não Disponivel</option>
+                </select>
+            </form>
+            <br><br>
+            <button onclick="atualizarDados()">Atualizar Produto</button>
+            <button onclick="deletarDados()">Deletar Produto</button>`
+                document.getElementById('categProd').querySelector(`option[value="${data.categoria}"]`).selected = true
+                document.getElementById('disponivel').querySelector(`option[value="${data.disponibilidade}"]`).selected = true
+            } else {
+                document.getElementById('imagem').innerHTML = ""
+            }
+        })
+
+    //DELETE
+    function deletarDados() {
+        fetch(`http://localhost:3000/produtos/${idproduto}`, {
+            method: 'DELETE'
+        }).then(response => response.json())
+    }
+
+    function atualizarDados() {
+        nomeProd = document.getElementById('nomeProd').value
+        descProd = document.getElementById('descProd').value
+        precoProd = document.getElementById('moedaProd').value + document.getElementById('precoProd').value
+        quantProd = document.getElementById('quantProd').value
+        categProd = document.getElementById('categProd').value
+        contato = document.getElementById('contato').value
+        disponivel = document.getElementById('disponivel').value
+
+        fetch(`http://localhost:3000/produtos/${idproduto}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                usuario: nome,
+                produto: nomeProd,
+                descricao: descProd,
+                preco: precoProd,
+                quantidade: quantProd,
+                categoria: categProd,
+                imagem: imagemProd,
+                contato: contato,
+                disponibilidade: disponivel
+            })
+        })
+            .then(response => response.json())
+    }
+
+    //Função para reduzir a qualidade da imagem
+    function reduceImageQuality(base64, quality) {
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+        var img = new Image();
+        img.src = base64;
+        return new Promise((resolve, reject) => {
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                resolve(canvas.toDataURL("image/jpeg", quality));
+            };
+            img.onerror = reject;
+        });
+    }
+
+    //Função atualizar imagem
+    document.getElementById("escolherimg").addEventListener("change", function () {
+        const file = this.files[0];
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+            reduceImageQuality(reader.result, 0.5).then(function (result) {
+                document.getElementById("imagem").style.backgroundImage = `url(${result})`;
+                lerImagem(result);
+            });
+        });
+        reader.readAsDataURL(file);
+    });
+
+    function lerImagem(imagem) {
+        imagemProd = imagem;
+    }
+
+    function enviarComentario() {
+        fetch('http://localhost:3000/comentarios', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: nome,
+                comentario: document.getElementById('comentario').value,
+                post: idproduto
+            })
+        })
+            .then(response => response.json())
+        window.location.reload()
+    }
+
+    if (nome == null) {
+        document.body.innerHTML = "<h1>FAÇA UM LOGIN</h1>"
+        alert("Você precisa de um login para entrar ver os produtos. redirecionando para a página de login...")
+        window.location.replace(`http://localhost:3000/`);
+    }
+
+    function abrirPagina() {
+        window.open("http://localhost:3000/compra.html", "_blank");
+    }
+</script>
+
+</html>

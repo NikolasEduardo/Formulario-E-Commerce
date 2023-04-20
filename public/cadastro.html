@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastre-se</title>
+</head>
+
+<body align="center">
+    <h1>Cadastro</h1>
+    <a href="index.html">Já tem um Login? Venha aqui!</a><br><br>
+    <form action="">
+        <label>Nome:</label>
+        <br>
+        <input type="text" id="username" maxlength="22">
+        <br>
+        <label>Senha:</label>
+        <br>
+        <input type="password" id="senha">
+        <br>
+
+        <br><br>
+
+        <button>Cadastrar</button>
+    </form>
+</body>
+<script>
+    //apagar o storage local
+    localStorage.removeItem("nomeUsuario");
+    //POST
+    document.querySelector('form').addEventListener('submit', evento => {
+        evento.preventDefault();
+        fetch(`http://localhost:3000/usuarios?username=${document.getElementById('username').value}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.length < 1) {
+                    console.log("deu certo");
+                    if (document.getElementById('username').value.length < 3 ||
+                        document.getElementById('senha').value.length < 8) {
+                        alert("o nome de usuário deve conter pelo menos 3 caracteres, e a senha pelo menos 8 caracteres")
+                        //Previne o envio padrão do formulário para não atualizar a página
+                        evento.preventDefault();
+
+                    } else {
+                        alert("permitido")
+                        enviarDados()
+                        localStorage.setItem("nomeUsuario", document.getElementById('username').value);
+                        window.location.replace("http://localhost:3000/produtosexiste.html");
+                    }
+                } else {
+                    evento.preventDefault();
+                    console.log("não pode");
+                }
+            })
+    })
+
+    function enviarDados() {
+        fetch('http://localhost:3000/usuarios', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: document.getElementById('username').value,
+                senha: document.getElementById('senha').value
+            })
+        })
+            .then(response => response.json())
+    }
+</script>
+
+</html>
