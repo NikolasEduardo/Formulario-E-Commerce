@@ -171,9 +171,13 @@
 
     const idproduto = window.location.hash.substring(1);
 
+    window.addEventListener("change", function () {
+        window.location.reload()
+    })
+
     var imagemProd
 
-    fetch(`http://localhost:3000/comentarios?post=${idproduto}`)
+    fetch(`comentarios?post=${idproduto}`)
         .then(response => response.json())
         .then(data => {
             for (let index = 0; index < data.length; index++) {
@@ -184,7 +188,7 @@
         })
 
 
-    fetch(`http://localhost:3000/produtos/${idproduto}`, {
+    fetch(`produtos/${idproduto}`, {
         method: 'GET'
     })
         .then(response => response.json())
@@ -247,11 +251,11 @@
                     <option value="Moda íntima">Moda íntima</option>
                     <option value="Papelaria">Papelaria</option>
                     <option value="Alimentos e bebidas">Alimentos e bebidas</option>
-                    <option value=“Joias e bijuterias”>Joias e bijuterias</option>
-                    <option value=“Artesanato”>Artesanato</option>
-                    <option value=“Produtos naturais”>Produtos naturais</option>
-                    <option value=“Ferramentas”>Ferramentas</option>
-                    <option value=“Música”>Música</option>
+                    <option value="Joias e bijuterias">Joias e bijuterias</option>
+                    <option value="Artesanato">Artesanato</option>
+                    <option value="Produtos naturais">Produtos naturais</option>
+                    <option value="Ferramentas">Ferramentas</option>
+                    <option value="Música">Música</option>
                 </select>
                 <br>
                 <label>Contato do cliente:</label>
@@ -277,9 +281,20 @@
 
     //DELETE
     function deletarDados() {
-        fetch(`http://localhost:3000/produtos/${idproduto}`, {
+        fetch(`produtos/${idproduto}`, {
             method: 'DELETE'
         }).then(response => response.json())
+
+        fetch(`comentarios?post=${idproduto}`)
+            .then(response => response.json())
+            .then(data => {
+                for (let index = 0; index < data.length; index++) {
+                    fetch(`comentarios/${data[index].id}`, {
+                        method: 'DELETE'
+                    }).then(response => response.json())
+                }
+                window.location.reload()
+            })
     }
 
     function atualizarDados() {
@@ -291,7 +306,7 @@
         contato = document.getElementById('contato').value
         disponivel = document.getElementById('disponivel').value
 
-        fetch(`http://localhost:3000/produtos/${idproduto}`, {
+        fetch(`produtos/${idproduto}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -346,7 +361,7 @@
     }
 
     function enviarComentario() {
-        fetch('http://localhost:3000/comentarios', {
+        fetch('comentarios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -364,12 +379,22 @@
     if (nome == null) {
         document.body.innerHTML = "<h1>FAÇA UM LOGIN</h1>"
         alert("Você precisa de um login para entrar ver os produtos. redirecionando para a página de login...")
-        window.location.replace(`http://localhost:3000/`);
+        window.location.replace(`index.html`);
     }
 
     function abrirPagina() {
-        window.open("http://localhost:3000/compra.html", "_blank");
+        window.open("compra.html", "_blank");
     }
+
+    console.log(document.getElementById('username').value);
+
+    setTimeout(function () {
+        console.log(document.getElementById('username').value);
+        if (document.getElementById('username').value == "undefined") {
+            document.body.innerHTML = '<h1>PRODUTO INEXISTENTE</h1><br><a href="produtosexiste.html">ver seus produtos</a><br><a href="produtooutros.html">conferir outros produtos</a><br><a href="index.html">Deslogar</a><br>'
+        }
+    }, 1000);
+
 </script>
 
 </html>

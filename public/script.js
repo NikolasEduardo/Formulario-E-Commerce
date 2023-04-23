@@ -11,7 +11,7 @@ var imagemProd;
 if(nome == null) {
     document.body.innerHTML = "<h1>FAÇA UM LOGIN</h1>"
     alert("Você precisa de um login para entrar ver os produtos. redirecionando para a página de login...")
-    window.location.replace(`http://localhost:3000/`);
+    window.location.replace(`index.html`);
 }
 
 document.getElementById('username').value = nome
@@ -76,12 +76,12 @@ document.querySelector('form').addEventListener('submit', evento => {
         //console.log(imagemProd);
         alert("Produto Cadastrado")
         enviarDados()
-        window.location.replace("http://localhost:3000/produtosexiste.html");
+        window.location.replace("produtosexiste.html");
     }
 })
 //POST
 function enviarDados() {
-    fetch('http://localhost:3000/produtos', {
+    fetch('produtos', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

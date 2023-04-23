@@ -32,7 +32,7 @@
 
     document.querySelector('form').addEventListener('submit', evento => {
         evento.preventDefault();
-        fetch(`http://localhost:3000/usuarios?username=${document.getElementById('username').value}`)
+        fetch(`usuarios?username=${document.getElementById('username').value}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
@@ -40,7 +40,7 @@
                         //inserir um dado local
                         localStorage.setItem("nomeUsuario", data[0].username);
                         console.log("funcionou");
-                        window.location.replace("http://localhost:3000/produtosexiste.html");
+                        window.location.replace("produtosexiste.html");
                     } else {
                         alert("Senha Incorreta")
                     }

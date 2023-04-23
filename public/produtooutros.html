@@ -42,17 +42,17 @@
     function removerConta() {
         //apagar o storage local
         localStorage.removeItem("nomeUsuario");
-        window.location.replace("http://localhost:3000/");
+        window.location.replace("index.html");
     }
 
     console.log(nome)
 
-    fetch(`http://localhost:3000/produtos`, {
+    fetch(`produtos`, {
         method: 'GET'
     }).then(response => response.json())
         .then(total => {
             for (let x = 1; x <= total.length; x++) {
-                fetch(`http://localhost:3000/produtos/${x}`, {
+                fetch(`produtos/${x}`, {
                     method: 'GET'
                 })
                     .then(response => response.json())
@@ -71,13 +71,13 @@
         })
 
     function mostrarDetalhes(verificar) {
-        window.location.replace(`http://localhost:3000/produtoespecifico.html#${verificar}`);
+        window.location.replace(`produtoespecifico.html#${verificar}`);
     }
 
     if(nome == null) {
         document.body.innerHTML = "<h1>FAÇA UM LOGIN</h1>"
         alert("Você precisa de um login para entrar ver os produtos. redirecionando para a página de login...")
-        window.location.replace(`http://localhost:3000/`);
+        window.location.replace(`index.html`);
     }
 </script>
 
