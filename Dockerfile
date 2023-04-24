@@ -3,10 +3,10 @@
 FROM node:18
 
 # Set the working directory in the container
-WORKDIR main/public
+WORKDIR /main
 
 # Copy the application files into the working directory
-COPY . main/public
+COPY . /main
 
 # Install the application dependencies
 RUN npm install
