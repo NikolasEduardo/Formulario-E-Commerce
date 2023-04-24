@@ -73,6 +73,7 @@
         h2,
         h4 {
             margin: 1px;
+            word-break: break-all;
         }
 
         @media(max-width: 850px) {
@@ -171,10 +172,6 @@
 
     const idproduto = window.location.hash.substring(1);
 
-    window.addEventListener("change", function () {
-        window.location.reload()
-    })
-
     var imagemProd
 
     fetch(`comentarios?post=${idproduto}`)
@@ -214,11 +211,11 @@
                 <br>
                 <label>Nome do Produto:</label>
                 <br>
-                <input value="${data.produto}" id="nomeProd" type="text" placeholder="Caixa de Fósforos">
+                <input value="${data.produto}" maxlength="25" id="nomeProd" type="text" placeholder="Caixa de Fósforos">
                 <br>
                 <label>Descrição:</label>
                 <br>
-                <textarea name="Descricao" id="descProd" cols="21" rows="4" style="resize: none"
+                <textarea maxlength="100" name="Descricao" id="descProd" cols="21" rows="4" style="resize: none"
                     placeholder="Produto Incrivel Charmoso para suas melhores necessidades">${data.descricao}</textarea>
                 <br>
                 <label>Preço:</label>
@@ -227,11 +224,11 @@
                     <option value="R$">R$</option>
                     <option value="US$">US$</option>
                 </select>
-                <input value="${data.preco.replace("R$", "").replace("US$", "")}" id="precoProd" type="text" placeholder="19.20">
+                <input maxlength="7" value="${data.preco.replace("R$", "").replace("US$", "")}" id="precoProd" type="text" placeholder="19.20">
                 <br>
                 <label>Quantidade:</label>
                 <br>
-                <input value="${data.quantidade}" id="quantProd" type="number" placeholder="10 unidades">
+                <input maxlength="5" value="${data.quantidade}" id="quantProd" type="number" placeholder="10 unidades">
                 <br>
                 <label>Categoria:</label>
                 <br>
@@ -260,7 +257,7 @@
                 <br>
                 <label>Contato do cliente:</label>
                 <br>
-                <input value="${data.contato}" id="contato" type="mail" placeholder="teste@example.com">
+                <input maxlength="30" value="${data.contato}" id="contato" type="mail" placeholder="teste@example.com">
                 <br>
                 <label>Disponibilidade:</label>
                 <br>
